@@ -1,9 +1,18 @@
 import express, { Request, Response } from "express";
+import { prisma } from "../index";
 
 const router = express.Router();
 
-router.get("/", (req: Request, res: Response) => {
-  res.send("GET request to /books updated");
+router.get("/", async (req: Request, res: Response) => {
+  const books = await prisma.book.findMany();
+
+  res.json(books);
+});
+
+router.post("/", async (req: Request, res: Response) => {
+  console.log(req.body);
+
+  res.send("ok");
 });
 
 export default router;
