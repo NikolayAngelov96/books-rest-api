@@ -48,4 +48,27 @@ router.post("/", async (req: Request, res: Response) => {
   }
 });
 
+router.get("/:bookId", async (req: Request, res: Response) => {
+  const { bookId } = req.params;
+
+  const book = await prisma.book.findUnique({
+    where: {
+      id: bookId,
+    },
+    include: {
+      author: true,
+    },
+  });
+
+  if (!book) {
+    return res
+      .status(404)
+      .json({
+        message: "Book with the provided id does not exist in database",
+      });
+  }
+
+  res.status(200).json(book);
+});
+
 export default router;
