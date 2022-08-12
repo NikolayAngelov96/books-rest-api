@@ -61,14 +61,28 @@ router.get("/:bookId", async (req: Request, res: Response) => {
   });
 
   if (!book) {
-    return res
-      .status(404)
-      .json({
-        message: "Book with the provided id does not exist in database",
-      });
+    return res.status(404).json({
+      message: "Book with the provided id does not exist in database",
+    });
   }
 
   res.status(200).json(book);
+});
+
+router.put("/:bookId", async (req: Request, res: Response) => {
+  const bookData = req.body;
+  const { bookId } = req.params;
+
+  const updatedBook = await prisma.book.update({
+    where: {
+      id: bookId,
+    },
+    data: {
+      ...bookData,
+    },
+  });
+
+  res.status(200).json(updatedBook);
 });
 
 export default router;
