@@ -22,13 +22,24 @@ router.get("/", async (req: Request, res: Response) => {
 router.post("/", async (req: Request, res: Response) => {
   console.log(req.body);
   try {
-    const book: Book = req.body;
+    const bookData: Book = req.body;
 
-    validateBook(book);
-    res.send("ok");
+    validateBook(bookData);
+
+    const book = await prisma.book.create({
+      data: {
+        ...bookData,
+      },
+      include: {
+        author: true,
+      },
+    });
+
+    res.status(201).json(book);
   } catch (error) {
     let message = "Something Went Wrong";
     if (error instanceof Error) {
+      console.error(error);
       message = error.message;
       return res.status(400).json({ message });
     } else {
