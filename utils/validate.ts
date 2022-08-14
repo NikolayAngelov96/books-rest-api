@@ -17,4 +17,16 @@ export const validateBook = (book: BookData) => {
   } else if (!authorId) {
     throw new Error("Please provide authorId");
   }
+
+  if (title && typeof title !== "string") {
+    throw new Error("Title should be of type string");
+  }
+
+  if (!Number.isInteger(year)) {
+    throw new Error("Year must be an integer");
+  }
+
+  if (description && typeof description !== "string") {
+    throw new Error("Description must be a string or null");
+  }
 };
