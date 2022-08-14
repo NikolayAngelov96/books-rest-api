@@ -1,7 +1,6 @@
-import { Book } from "@prisma/client";
 import express, { Request, Response } from "express";
 import { prisma } from "../index";
-import { validateBook } from "../utils/validate";
+import { validateBook, BookData } from "../utils/validate";
 
 const router = express.Router();
 
@@ -20,15 +19,17 @@ router.get("/", async (req: Request, res: Response) => {
 });
 
 router.post("/", async (req: Request, res: Response) => {
-  console.log(req.body);
   try {
-    const bookData: Book = req.body;
+    const bookData: BookData = req.body;
 
     validateBook(bookData);
 
     const book = await prisma.book.create({
       data: {
-        ...bookData,
+        title: bookData.title,
+        year: bookData.year,
+        authorId: bookData.authorId,
+        description: bookData.description || null,
       },
       include: {
         author: true,
