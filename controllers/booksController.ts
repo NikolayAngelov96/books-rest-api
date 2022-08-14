@@ -88,4 +88,22 @@ router.put("/:bookId", async (req: Request, res: Response) => {
   }
 });
 
+router.delete("/:bookId", async (req: Request, res: Response) => {
+  try {
+    const { bookId } = req.params;
+
+    const deletedBook = await prisma.book.delete({
+      where: {
+        id: bookId,
+      },
+    });
+
+    res.status(200).json({ message: "Successfully deleted a book" });
+  } catch (error) {
+    const { statusCode, message } = getError(error);
+
+    res.status(statusCode).json({ message });
+  }
+});
+
 export default router;
