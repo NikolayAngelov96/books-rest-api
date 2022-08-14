@@ -5,10 +5,6 @@ export const getError = (error: any) => {
     console.error(error);
     statusCode = 400;
     message = error.message;
-    return {
-      statusCode,
-      message,
-    };
   }
 
   return { statusCode, message };
