@@ -1,5 +1,3 @@
-import { Book } from "@prisma/client";
-
 export type BookData = {
   title: string;
   year: number;
