@@ -1,6 +1,7 @@
 import express, { Request, Response } from "express";
 import { prisma } from "../index";
 import { validateBook, BookData } from "../utils/validate";
+import { getError } from "../utils/getError";
 
 const router = express.Router();
 
@@ -38,14 +39,9 @@ router.post("/", async (req: Request, res: Response) => {
 
     res.status(201).json(book);
   } catch (error) {
-    let message = "Something Went Wrong";
-    if (error instanceof Error) {
-      console.error(error);
-      message = error.message;
-      return res.status(400).json({ message });
-    } else {
-      return res.status(500).json({ message });
-    }
+    const { statusCode, message } = getError(error);
+
+    res.status(statusCode).json({ message });
   }
 });
 
@@ -71,19 +67,25 @@ router.get("/:bookId", async (req: Request, res: Response) => {
 });
 
 router.put("/:bookId", async (req: Request, res: Response) => {
-  const bookData = req.body;
-  const { bookId } = req.params;
+  try {
+    const bookData = req.body;
+    const { bookId } = req.params;
 
-  const updatedBook = await prisma.book.update({
-    where: {
-      id: bookId,
-    },
-    data: {
-      ...bookData,
-    },
-  });
+    const updatedBook = await prisma.book.update({
+      where: {
+        id: bookId,
+      },
+      data: {
+        ...bookData,
+      },
+    });
 
-  res.status(200).json(updatedBook);
+    res.status(200).json(updatedBook);
+  } catch (error) {
+    const { statusCode, message } = getError(error);
+
+    res.status(statusCode).json({ message });
+  }
 });
 
 export default router;
