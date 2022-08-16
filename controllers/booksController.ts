@@ -6,6 +6,9 @@ import { getError } from "../utils/getError";
 const router = express.Router();
 
 router.get("/", async (req: Request, res: Response) => {
+  const skip = parseInt(req.query?.skip as string) || 0;
+  const take = parseInt(req.query?.take as string) || 10;
+
   const books = await prisma.book.findMany({
     select: {
       id: true,
@@ -14,6 +17,11 @@ router.get("/", async (req: Request, res: Response) => {
       year: true,
       author: true,
     },
+    orderBy: {
+      year: "asc",
+    },
+    skip: skip,
+    take: take,
   });
 
   res.json(books);
