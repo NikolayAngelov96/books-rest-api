@@ -37,4 +37,22 @@ router.post("/", async (req: Request, res: Response) => {
   }
 });
 
+router.get("/:authorId", async (req: Request, res: Response) => {
+  const { authorId } = req.params;
+
+  const author = await prisma.author.findUnique({
+    where: {
+      id: authorId,
+    },
+  });
+
+  if (!author) {
+    return res
+      .status(404)
+      .json({ message: "Author with that Id does not exist in the database" });
+  }
+
+  res.status(200).json(author);
+});
+
 export default router;
