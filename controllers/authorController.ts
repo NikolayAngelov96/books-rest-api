@@ -55,4 +55,26 @@ router.get("/:authorId", async (req: Request, res: Response) => {
   res.status(200).json(author);
 });
 
+router.put("/:authorId", async (req: Request, res: Response) => {
+  try {
+    const { authorId } = req.params;
+    const authorData = req.body;
+
+    const editedAuthor = await prisma.author.update({
+      where: {
+        id: authorId,
+      },
+      data: {
+        ...authorData,
+      },
+    });
+
+    res.status(200).json(editedAuthor);
+  } catch (error) {
+    const { statusCode, message } = getError(error);
+
+    res.status(statusCode).json({ message });
+  }
+});
+
 export default router;
