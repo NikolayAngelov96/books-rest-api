@@ -44,6 +44,9 @@ router.get("/:authorId", async (req: Request, res: Response) => {
     where: {
       id: authorId,
     },
+    include: {
+      books: true,
+    },
   });
 
   if (!author) {
@@ -70,6 +73,25 @@ router.put("/:authorId", async (req: Request, res: Response) => {
     });
 
     res.status(200).json(editedAuthor);
+  } catch (error) {
+    const { statusCode, message } = getError(error);
+
+    res.status(statusCode).json({ message });
+  }
+});
+
+router.delete("/:authorId", async (req: Request, res: Response) => {
+  try {
+    const { authorId } = req.params;
+
+    await prisma.$transaction([
+      prisma.book.deleteMany({ where: { authorId: authorId } }),
+      prisma.author.delete({ where: { id: authorId } }),
+    ]);
+
+    res
+      .status(200)
+      .json({ message: "Succesfully deleted author and his books" });
   } catch (error) {
     const { statusCode, message } = getError(error);
 
