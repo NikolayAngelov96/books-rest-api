@@ -15,8 +15,8 @@ model Book {
   title       String
   year        Int
   description String?
-  author      Author? @relation(fields: [authorId], references: [id])
-  authorId    String?
+  author      Author @relation(fields: [authorId], references: [id])
+  authorId    String
 }
 
 model Author {
