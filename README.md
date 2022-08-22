@@ -12,7 +12,7 @@
 ### Endpoints
 The available endpoints are **`/books`**, **`/authors`**
 
-#### Books endpoint
+### **`/books`** endpoint
 #### Read
 
 Send a **`GET`** request to the endpoint will return the first 10 books ordered by **`year: "asc"`**.
@@ -52,3 +52,53 @@ containing body:
 **Description** field it's optional and if not provided it'll be null in the db.
 
 **AuthorId** field must be actual already existing author id from the Authors table.
+
+The response will contain status **`201`** created and the newly created book in JSON format.
+
+### **`/books/{bookId}`** endpoint
+#### Read
+
+**`GET`** request will return a book with the provided **id**
+```
+{
+  id: string,
+  title: string,
+  description: string,
+  year: number,
+  authorId: string,
+  author: {
+    id: string,
+    firstName: string,
+    lastName: string,
+    nationality: string
+  }
+}
+```
+If the provided **id** doesn't exist it will return a response with status **`404`** and JSON
+```
+{
+  message: "Book with the provided id does not exist in database"
+}
+```
+
+#### Update
+
+Sending **`PUT`** request with **body**(w/ the field/s you want to update) will **update** the record and the fields that are not present in the body will remain the same.
+
+#### Delete
+
+**`DELETE`** request will detele the book with the provided id from the database.
+
+### **`/authors`** endpoint
+#### Read
+
+Send a **`GET`** request to the endpoint will return all authors ordered by **`firstName: "asc"`**.
+The response will be JSON format. Array of **Author** objects: 
+```
+{
+   id: string,
+   firstName: string,
+   lastName: string,
+   nationality: string
+}
+```
