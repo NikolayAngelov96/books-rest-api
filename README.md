@@ -38,5 +38,17 @@ and it'll start after the number you specified in skip.
 Example
   - **`GET`** request to **`/books?skip=2&take=2`** it will give 3rd and 4th book
  
+#### Write
+If you want to create new Book to the database you need to send **`POST`** request to **`/books`**,
+containing body:
+```
+{
+  title: string,
+  year: number,
+  authorId: string,
+  description?: string
+}
+```
+**Description** field it's optional and if not provided it'll be null in the db.
 
-  
+**AuthorId** field must be actual already existing author id from the Authors table.
