@@ -102,3 +102,50 @@ The response will be JSON format. Array of **Author** objects:
    nationality: string
 }
 ```
+
+#### Write
+If you want to create new Author to the database you need to send **`POST`** request to **`/authors`**,
+containing body:
+```
+{
+   firstName: string,
+   lastName: string,
+   nationality: string
+}
+```
+The response will contain status **`201`** created and the newly created author in JSON format.
+
+### **`/authors/{authorId}`** endpoint
+**`GET`** request will return an author with the provided **id** and books field with all books belonging to this author
+```
+{
+   id: string,
+   firstName: string,
+   lastName: string,
+   nationality: string
+   books: [
+      {
+        id: string,
+        title: string,
+        year: number,
+        description: string,
+        authorId: string
+      },
+      ...
+   ]
+}
+```
+If the provided **id** doesn't exist it will return a response with status **`404`** and JSON
+```
+{
+  message: "Author with that Id does not exist in the database"
+}
+```
+
+#### Update
+
+Sending **`PUT`** request with **body**(w/ the field/s you want to update) it will **update** the record and the fields that are not present in the body will remain the same.
+
+#### Delete
+
+**`DELETE`** request will detele the author with the provided id and **all his books** from the database.
